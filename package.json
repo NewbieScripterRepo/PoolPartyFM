@@ -8,6 +8,8 @@
     "nativescript-vue": "3.0.0-rc.1"
   },
   "devDependencies": {
+    "@nativescript/android": "8.6.2",
+    "@nativescript/ios": "8.6.3",
     "@nativescript/tailwind": "~2.0.1",
     "@nativescript/types": "~8.6.1",
     "@nativescript/webpack": "~5.0.0",
