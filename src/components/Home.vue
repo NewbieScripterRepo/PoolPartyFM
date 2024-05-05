@@ -52,7 +52,7 @@ onUnmounted(() => {
         <GridLayout
           class="pt-3 bg-zinc-800 rounded"
           columns="80,*,80"
-          rows="50, 70"
+          rows="70, 70"
           height="auto"
         >
           <Button
@@ -68,7 +68,7 @@ onUnmounted(() => {
             color="#fff"
             col="1"
             row="0"
-            height="40"
+            height="50"
             text="$fonticon('fa-angle-left')"
           >
             <FormattedString>
