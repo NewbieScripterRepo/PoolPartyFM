@@ -22,16 +22,16 @@ onUnmounted(() => {});
             stretch="fill"
           />
           <Label
-            class="fas text-center font-bold text-xs color-orange-100"
+            class="text-center font-bold text-xs color-orange-100"
             col="1"
             row="1"
-            :text="$fonticon('fa-explosion')"
+            text="Poolparty FM"
           />
           <Label
-            class="fa font-bold text-xs color-orange-100"
+            class="fas font-bold text-xs color-orange-100"
             col="2"
             row="1"
-            :text="$fonticon('fa-user')"
+            :text="$fonticon('fa-angle-right')"
           />
         </GridLayout>
       </ActionBar>
