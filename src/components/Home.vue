@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { FormattedString } from "@nativescript/core";
-import { onMounted, onUnmounted, ref } from "nativescript-vue";
+import { defineComponent, onMounted, onUnmounted, ref } from "nativescript-vue";
+import ProgressBar from "./ProgressBar.vue"; // Adjust the path as necessary
 
 // define a variable
 let progress = ref(0.0); // in percent
@@ -51,7 +52,7 @@ onUnmounted(() => {
 
       <StackLayout class="p-2 bg-main">
         <GridLayout
-          class="pt-3 bg-zinc-800 rounded"
+          class="pt-3 bg-zinc-800 rounded-t"
           columns="80,*,80"
           rows="70, 70"
           height="auto"
@@ -88,15 +89,7 @@ onUnmounted(() => {
             :text="$fonticon('fa-caret-right')"
           />
 
-          <AbsoluteLayout colSpan="3" row="1" col="0" class="mt-3 bg-zinc-700">
-            <StackLayout
-              class="bg-zinc-600"
-              height="70"
-              top="0"
-              left="0"
-              :width="progress + '%'"
-            />
-          </AbsoluteLayout>
+          <ProgressBar row="1" colSpan="3" class="mt-3" />
         </GridLayout>
 
         <!-- Play control -->
