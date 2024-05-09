@@ -49,7 +49,7 @@ onUnmounted(() => {
         </GridLayout>
       </ActionBar>
 
-      <StackLayout class="p-2">
+      <StackLayout class="p-2 bg-main">
         <GridLayout
           class="pt-3 bg-zinc-800 rounded"
           columns="80,*,80"
@@ -101,26 +101,27 @@ onUnmounted(() => {
 
         <!-- Play control -->
         <GridLayout
-          class="bg-amber-100 border-4 border-black rounded-b"
-          rows="80, 100, 90"
+          class="bg-amber-100 border-4 border-black rounded-b pb-2 bg-dots"
+          rows="40, 80, 100, 90"
           columns="65,*,*,65"
         >
+          <StackLayout row="0" colSpan="4" class="mb-4 bg-lines" />
           <Button
             class="fas text-sm bg-transparent z-0"
             color="#000"
             col="0"
-            row="0"
+            row="1"
             :text="$fonticon('fa-arrow-up-from-bracket')"
           />
           <Button
             class="fa text-sm bg-transparent z-0"
             color="#000"
             col="3"
-            row="0"
+            row="1"
             :text="$fonticon('fa-heart')"
           />
 
-          <StackLayout row="0" col="1" colSpan="2" class="py-2 color-black">
+          <StackLayout row="1" col="1" colSpan="2" class="py-2 color-black">
             <Label class="text-xs text-center" text="0:00 / 3:47" />
             <Label
               class="font-bold text-sm text-center"
@@ -131,7 +132,7 @@ onUnmounted(() => {
 
           <GridLayout
             class="mx-4 mt-8 border-2 border-r-8 border-b-8 border-black rounded"
-            row="1"
+            row="2"
             col="0"
             colSpan="4"
             columns="*,*,*"
@@ -162,7 +163,7 @@ onUnmounted(() => {
 
           <Button
             class="text-right text-sm pr-4 bg-transparent z-0"
-            row="2"
+            row="3"
             col="1"
           >
             <FormattedString>
@@ -173,7 +174,7 @@ onUnmounted(() => {
 
           <Button
             class="text-left text-sm pl-4 bg-transparent z-0"
-            row="2"
+            row="3"
             col="2"
           >
             <FormattedString>
@@ -187,4 +188,21 @@ onUnmounted(() => {
   </Frame>
 </template>
 
-<style></style>
+<style>
+.bg-dots {
+  background-image: url("~/assets/dots.png");
+  background-repeat: repeat-x;
+  background-position: bottom;
+}
+
+.bg-lines {
+  background-image: url("~/assets/lines.png");
+  background-repeat: repeat-x;
+  background-position: bottom;
+}
+
+.bg-main {
+  background-image: url("~/assets/bg.jpg");
+  background-size: cover;
+}
+</style>
