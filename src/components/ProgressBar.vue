@@ -27,8 +27,6 @@ onMounted(() => {});
 
 <template>
   <GridLayout rows="*" :columns="columns">
-    <Label text="abc" />
-
     <StackLayout
       row="0"
       :col="index"
