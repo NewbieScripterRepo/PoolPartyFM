@@ -18,6 +18,15 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(timer);
 });
+
+const playState = ref<String>("paused");
+const backward = () => {
+  console.log("backward");
+};
+
+const forward = () => {
+  console.log("forward");
+};
 </script>
 
 <template>
@@ -144,6 +153,7 @@ onUnmounted(() => {
               col="0"
               row="0"
               :text="$fonticon('fa-step-backward')"
+              @tap="backward()"
             />
             <Button
               class="fas text-sm bg-transparent z-0"
@@ -158,11 +168,13 @@ onUnmounted(() => {
               col="2"
               row="0"
               :text="$fonticon('fa-step-forward')"
+              @tap="forward()"
             />
           </GridLayout>
 
           <Button
             class="text-right font-pixelarial pr-4 bg-transparent z-0"
+            height="40"
             row="3"
             col="1"
           >
@@ -174,6 +186,7 @@ onUnmounted(() => {
 
           <Button
             class="text-left font-pixelarial pl-4 bg-transparent z-0"
+            height="40"
             row="3"
             col="2"
           >
