@@ -20,3 +20,20 @@ ActionBar {
   font-weight: 900;
   font-display: block;
 }
+
+.font-pixelarial {
+  font-family: "PixelArial";
+}
+
+Label.font-pixelarial {
+  font-size: 8;
+}
+
+Button.font-pixelarial {
+  font-size: 11;
+}
+
+.font-chikarego2 {
+  font-family: "ChiKareGo2";
+}
+

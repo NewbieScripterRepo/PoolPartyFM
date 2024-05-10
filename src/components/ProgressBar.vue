@@ -1,11 +1,18 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "nativescript-vue";
 
-const barsCount = 90;
+const props = defineProps({
+  progress: {
+    type: Number,
+    required: true,
+  }, // 0.0 - 100.0
+});
+
+const barsCount = 100;
 const maxHeight = 80;
 const minHeight = 10;
 let bars = ref<Number[]>([]);
-// create 90 bars
+// create 100 bars
 for (let i = 0; i < barsCount; i++) {
   bars.value.push(Math.random() * (maxHeight - minHeight) + minHeight);
 }
@@ -13,8 +20,8 @@ for (let i = 0; i < barsCount; i++) {
 // build string like *,*,*
 const columns = computed(() => Array(barsCount).fill("*").join(","));
 const barStyles = computed(() =>
-  bars.value.map((bar) => ({
-    class: "bg-zinc-700",
+  bars.value.map((bar, index) => ({
+    class: index < props.progress ? "bg-zinc-700" : "bg-zinc-700",
     styles: {
       height: `${bar}%`,
       margin: "0 0.25",

@@ -36,7 +36,7 @@ onUnmounted(() => {
             stretch="fill"
           />
           <Label
-            class="text-center font-bold text-xs color-orange-100"
+            class="text-center text-white font-chikarego2"
             col="1"
             row="1"
             text="Poolparty FM"
@@ -66,7 +66,7 @@ onUnmounted(() => {
           />
 
           <Button
-            class="text-sm border border-r-4 border-b-4 border-white rounded bg-zinc-800"
+            class="border border-r-4 border-b-4 border-white rounded bg-zinc-800 font-pixelarial"
             color="#fff"
             col="1"
             row="0"
@@ -75,8 +75,8 @@ onUnmounted(() => {
           >
             <FormattedString>
               <Span text="Channel: " />
-              <Span class="font-bold" text="Poolsuite FM" />
-              <Span text="    " />
+              <Span class="font-chikarego2 text-lg" text="Poolsuite FM" />
+              <Span text=" " />
               <Span class="fas text-xs" :text="$fonticon('fa-sort')" />
             </FormattedString>
           </Button>
@@ -89,12 +89,12 @@ onUnmounted(() => {
             :text="$fonticon('fa-caret-right')"
           />
 
-          <ProgressBar row="1" colSpan="3" class="mt-3" />
+          <ProgressBar :progress="progress" row="1" colSpan="3" class="mt-3" />
         </GridLayout>
 
         <!-- Play control -->
         <GridLayout
-          class="bg-amber-100 border-4 border-black rounded-b pb-2 bg-dots"
+          class="bg-amber-50 border-4 border-black rounded-b pb-2 bg-dots"
           rows="40, 80, 100, 90"
           columns="65,*,*,65"
         >
@@ -114,13 +114,20 @@ onUnmounted(() => {
             :text="$fonticon('fa-heart')"
           />
 
-          <StackLayout row="1" col="1" colSpan="2" class="py-2 color-black">
-            <Label class="text-xs text-center" text="0:00 / 3:47" />
+          <StackLayout row="1" col="1" colSpan="2" class="py-2">
             <Label
-              class="font-bold text-sm text-center"
+              color="#000"
+              class="text-black font-pixelarial text-center"
+              text="0:00 / 3:47"
+            />
+            <Label
+              class="text-black my-2 text-center font-chikarego2"
               text="High Hopes [SOS Band Cover]"
             />
-            <Label class="text-xs text-center" text="Basement Love" />
+            <Label
+              class="text-black font-pixelarial text-center"
+              text="Basement Love"
+            />
           </StackLayout>
 
           <GridLayout
@@ -155,7 +162,7 @@ onUnmounted(() => {
           </GridLayout>
 
           <Button
-            class="text-right text-sm pr-4 bg-transparent z-0"
+            class="text-right font-pixelarial pr-4 bg-transparent z-0"
             row="3"
             col="1"
           >
@@ -166,7 +173,7 @@ onUnmounted(() => {
           </Button>
 
           <Button
-            class="text-left text-sm pl-4 bg-transparent z-0"
+            class="text-left font-pixelarial pl-4 bg-transparent z-0"
             row="3"
             col="2"
           >
