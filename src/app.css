@@ -25,6 +25,10 @@ ActionBar {
   font-family: "PixelArial";
 }
 
+.font-chikarego2 {
+  font-family: "ChiKareGo2";
+}
+
 Label.font-pixelarial {
   font-size: 8;
 }
@@ -32,8 +36,3 @@ Label.font-pixelarial {
 Button.font-pixelarial {
   font-size: 11;
 }
-
-.font-chikarego2 {
-  font-family: "ChiKareGo2";
-}
-

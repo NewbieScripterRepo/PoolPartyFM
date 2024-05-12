@@ -3,6 +3,9 @@ import Home from "./components/Home.vue";
 
 const app = createApp(Home);
 
+/**
+ * Add touch animation
+ */
 import { CoreTypes, TouchManager } from "@nativescript/core";
 TouchManager.enableGlobalTapAnimations = true;
 TouchManager.animations = {
