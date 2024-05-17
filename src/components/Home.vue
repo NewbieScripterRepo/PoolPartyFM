@@ -27,6 +27,10 @@ const backward = () => {
 const forward = () => {
   console.log("forward");
 };
+
+const dummyTap = () => {
+  console.log("dummy tap");
+};
 </script>
 
 <template>
@@ -67,11 +71,14 @@ const forward = () => {
           height="auto"
         >
           <Button
-            class="fas text-xs bg-zinc-800"
+            class="fas text-xs z-0 bg-transparent rounded-full"
             color="#fff"
             col="0"
             row="0"
+            width="60"
+            height="60"
             :text="$fonticon('fa-caret-left')"
+            @tap="dummyTap"
           />
 
           <Button
@@ -81,6 +88,7 @@ const forward = () => {
             row="0"
             height="50"
             text="$fonticon('fa-angle-left')"
+            @tap="dummyTap"
           >
             <FormattedString>
               <Span text="Channel: " />
@@ -91,11 +99,14 @@ const forward = () => {
           </Button>
 
           <Button
-            class="fas text-xs bg-zinc-800"
+            class="fas text-xs z-0 bg-transparent rounded-full"
             color="#fff"
             col="2"
             row="0"
+            width="60"
+            height="60"
             :text="$fonticon('fa-caret-right')"
+            @tap="dummyTap"
           />
 
           <ProgressBar :progress="progress" row="1" colSpan="3" class="mt-3" />
@@ -109,18 +120,24 @@ const forward = () => {
         >
           <StackLayout row="0" colSpan="4" class="mb-4 bg-lines" />
           <Button
-            class="fas text-sm bg-transparent z-0"
+            class="fas text-sm bg-transparent z-0 rounded-full"
             color="#000"
             col="0"
             row="1"
             :text="$fonticon('fa-arrow-up-from-bracket')"
+            height="60"
+            width="60"
+            @tap="dummyTap"
           />
           <Button
-            class="fa text-sm bg-transparent z-0"
+            class="fa text-sm bg-transparent z-0 rounded-full"
             color="#000"
             col="3"
             row="1"
+            height="60"
+            width="60"
             :text="$fonticon('fa-heart')"
+            @tap="dummyTap"
           />
 
           <StackLayout row="1" col="1" colSpan="2" class="py-2">
@@ -145,6 +162,7 @@ const forward = () => {
             col="0"
             colSpan="4"
             columns="*,*,*"
+            rows="*"
             height="auto"
           >
             <Button
@@ -153,14 +171,15 @@ const forward = () => {
               col="0"
               row="0"
               :text="$fonticon('fa-step-backward')"
-              @tap="backward()"
+              @tap="dummyTap"
             />
             <Button
-              class="fas text-sm bg-transparent z-0"
+              class="fas text-sm z-0 border bg-transparent border-transparent"
               color="#000"
               col="1"
               row="0"
               :text="$fonticon('fa-play')"
+              @tap="dummyTap"
             />
             <Button
               class="fas text-sm bg-transparent z-0 border-l-2 border-black"
@@ -168,7 +187,7 @@ const forward = () => {
               col="2"
               row="0"
               :text="$fonticon('fa-step-forward')"
-              @tap="forward()"
+              @tap="dummyTap"
             />
           </GridLayout>
 
@@ -177,6 +196,7 @@ const forward = () => {
             height="40"
             row="3"
             col="1"
+            @tap="dummyTap"
           >
             <FormattedString>
               <Span class="fa" :text="$fonticon('fa-paper-plane')" />
@@ -189,6 +209,7 @@ const forward = () => {
             height="40"
             row="3"
             col="2"
+            @tap="dummyTap"
           >
             <FormattedString>
               <Span class="fa" :text="$fonticon('fa-user')" />

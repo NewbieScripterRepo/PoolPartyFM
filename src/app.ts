@@ -6,18 +6,18 @@ const app = createApp(Home);
 /**
  * Add touch animation
  */
-import { CoreTypes, TouchManager } from "@nativescript/core";
+import { Color, CoreTypes, TouchManager } from "@nativescript/core";
 TouchManager.enableGlobalTapAnimations = true;
 TouchManager.animations = {
   down: {
-    backgroundColor: "#00000010",
+    backgroundColor: new Color("#cccccc33"),
     duration: 50,
-    curve: CoreTypes.AnimationCurve.easeInOut,
+    curve: CoreTypes.AnimationCurve.easeIn,
   },
   up: {
-    backgroundColor: "transparent",
+    backgroundColor: new Color("#cccccc00"),
     duration: 50,
-    curve: CoreTypes.AnimationCurve.easeInOut,
+    curve: CoreTypes.AnimationCurve.easeOut,
   },
 };
 
@@ -27,7 +27,6 @@ TouchManager.animations = {
 import { FontIconFactory, fonticon } from "nativescript-fonticon";
 import { knownFolders } from "@nativescript/core/file-system";
 
-FontIconFactory.debug = false;
 FontIconFactory.paths = {
   fa: knownFolders.currentApp().getFile("./assets/fa.css").readTextSync(),
 };
