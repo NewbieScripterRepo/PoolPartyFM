@@ -16,7 +16,7 @@ Big fan of PoolSuite FM! Since there's no Android version, I'm creating my own w
 
 ## Branches
 
-Each branch is result of a part of tutorial.
+Each branch is a part of tutorial as I progress.
 
 | Branch             | Description                                                                                                                        |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
@@ -36,3 +36,9 @@ Make sure at least Anrdoid SDK Platform >33 is installed.
 
 - `ns run android`
 - Enjoy!
+
+## Credits
+
+- Original design idea from [PoolSuite FM](https://poolsuite.net/)
+- Image assets created by my humble image editing skills
+- Logo by Microsoft Copilot, prompt: "draw a palm tree black and white icon, transparent background"
