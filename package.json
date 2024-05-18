@@ -4,7 +4,10 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@nativescript-use/vue": "^0.0.42",
     "@nativescript/core": "^8.7.0",
+    "@nativescript/picker": "^4.1.0",
+    "nativescript-audio": "^6.2.6",
     "nativescript-fonticon": "^8.0.2",
     "nativescript-vue": "3.0.0-rc.1"
   },

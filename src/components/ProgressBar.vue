@@ -21,7 +21,7 @@ for (let i = 0; i < barsCount; i++) {
 const columns = computed(() => Array(barsCount).fill("*").join(","));
 const barStyles = computed(() =>
   bars.value.map((bar, index) => ({
-    class: index < props.progress ? "bg-zinc-700" : "bg-zinc-700",
+    class: index < props.progress ? "bg-zinc-500" : "bg-zinc-700",
     styles: {
       height: `${bar}%`,
       margin: "0 0.25",

@@ -11,13 +11,13 @@ TouchManager.enableGlobalTapAnimations = true;
 TouchManager.animations = {
   down: {
     backgroundColor: new Color("#cccccc33"),
-    duration: 50,
-    curve: CoreTypes.AnimationCurve.easeIn,
+    duration: 25,
+    curve: CoreTypes.AnimationCurve.linear,
   },
   up: {
     backgroundColor: new Color("#cccccc00"),
-    duration: 50,
-    curve: CoreTypes.AnimationCurve.easeOut,
+    duration: 100,
+    curve: CoreTypes.AnimationCurve.linear,
   },
 };
 

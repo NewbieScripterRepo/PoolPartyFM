@@ -1,41 +1,292 @@
 <script lang="ts" setup>
-import { FormattedString } from "@nativescript/core";
-import { defineComponent, onMounted, onUnmounted, ref } from "nativescript-vue";
+import { Dialogs, FormattedString } from "@nativescript/core";
+import { AudioPlayerOptions, TNSPlayer } from "nativescript-audio";
+import {
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+} from "nativescript-vue";
 import ProgressBar from "./ProgressBar.vue"; // Adjust the path as necessary
 
-// define a variable
-let progress = ref(0.0); // in percent
-let timer: any;
+/**
+ * Global state
+ */
+const playListData = ref<null | PlaylistResponse>(null);
+const audioPlayer: TNSPlayer = new TNSPlayer();
+const progressTimer = ref<any>(null);
+
+/**
+ * Page events
+ */
+
+const onLoaded = () => {
+  if (!playListData.value) {
+    fetchPlaylist();
+  }
+};
+
 onMounted(() => {
-  timer = setInterval(() => {
-    progress.value += 0.3;
-    if (progress.value >= 100) {
-      clearInterval(timer);
+  // keep track of progress
+  progressTimer.value = setInterval(() => {
+    if (playState.value === "playing" && activeTrack.value) {
+      const duration = activeTrack.value.duration_ms;
+      const currentMs = audioPlayer.currentTime;
+      progressInMs.value = currentMs;
+      progress.value = (currentMs / duration) * 100;
+    } else {
+      progress.value = 0;
+      progressInMs.value = 0;
     }
-  }, 100);
+    progressText.value = `${convertToHHmm(
+      progressInMs.value
+    )} / ${convertToHHmm(activeTrack.value?.duration_ms || 0)}`;
+  }, 1000);
 });
 
 onUnmounted(() => {
-  clearInterval(timer);
+  if (progressTimer.value) {
+    clearInterval(progressTimer.value);
+  }
 });
 
-const playState = ref<String>("paused");
-const backward = () => {
-  console.log("backward");
+const onTapChannel = () => {
+  Dialogs.action({
+    message: "Select a channel",
+    cancelButtonText: "Cancel",
+    actions: playListData.value?.payload.map((playlist) => playlist.name) || [],
+  }).then((result) => {
+    if (result !== "Cancel") {
+      if (activePlaylist.value?.name === result) {
+        return;
+      }
+      const selectedPlaylist = playListData.value?.payload.find(
+        (playlist) => playlist.name === result
+      );
+      if (selectedPlaylist) {
+        setPlaylist(selectedPlaylist);
+      }
+    }
+  });
 };
 
-const forward = () => {
-  console.log("forward");
+/**
+ * Play state
+ */
+const playState = ref<string>("paused");
+const activePlaylist = ref<Playlist | null>(null);
+const activeTrack = ref<Track | null>(null);
+const activeIndex = ref(0);
+const progress = ref(0.0); // in percent
+const progressInMs = ref(0); // in milliseconds
+const progressText = ref("0:00 / 0:00");
+const loop = ref(false);
+
+const onTapBackward = () => {
+  // previous track
+  if (activePlaylist.value) {
+    pauseAudio();
+    const tracks = activePlaylist.value.tracks_in_order;
+    const currentIndex = activeIndex.value;
+    const newIndex = currentIndex - 1;
+    if (newIndex >= 0) {
+      setActiveTrack(tracks[newIndex]);
+      activeIndex.value = newIndex;
+    }
+  }
 };
+
+const onTapForward = () => {
+  // next track
+  if (activePlaylist.value) {
+    pauseAudio();
+    const tracks = activePlaylist.value.tracks_in_order;
+    const currentIndex = activeIndex.value;
+    const newIndex = currentIndex + 1;
+    if (newIndex < tracks.length) {
+      setActiveTrack(tracks[newIndex]);
+      activeIndex.value = newIndex;
+    }
+  }
+};
+
+const hasNextTrack = () => {
+  if (activePlaylist.value) {
+    const tracks = activePlaylist.value.tracks_in_order;
+    const currentIndex = activeIndex.value;
+    return currentIndex < tracks.length - 1;
+  }
+  return false;
+};
+
+const onTapPlay = () => {
+  // toggle play state
+  if (playState.value === "paused" && activeTrack.value) {
+    playState.value = "playing";
+    playAudio();
+  } else {
+    playState.value = "paused";
+    pauseAudio();
+  }
+};
+
+const setPlaylist = (playlist: Playlist) => {
+  activePlaylist.value = playlist;
+  if (playlist.tracks_in_order[0]) {
+    setActiveTrack(playlist.tracks_in_order[0]);
+    activeIndex.value = 0;
+  } else {
+    setActiveTrack(null);
+    activeIndex.value = 0;
+  }
+};
+
+const setActiveTrack = (track: Track | null) => {
+  activeTrack.value = track;
+  console.log("Switch track: ", track?.title);
+  if (track) {
+    fetchTrackMeta(track).then(() => {
+      loadAudio(track);
+    });
+  }
+};
+
+const loadAudio = (track: Track) => {
+  const goNextSong = () => {
+    if (hasNextTrack()) {
+      onTapForward();
+    } else {
+      playState.value = "paused";
+    }
+  };
+  audioPlayer.pause();
+  if (!track.audio_url || track.audio_error) {
+    console.log("Continue to next song due to audio error");
+    // continue
+    goNextSong();
+    return;
+  }
+
+  const playerOptions: AudioPlayerOptions = {
+    audioFile: track.audio_url,
+    loop: false,
+    completeCallback: goNextSong,
+    errorCallback: function (errorObject: any) {
+      console.error("Error playing audio", errorObject);
+      goNextSong();
+    },
+    infoCallback: function (info: any) {
+      console.log("infoCallback", info);
+    },
+  };
+
+  console.log("Init audio player from url", track.audio_url);
+  audioPlayer
+    .initFromFile(playerOptions)
+    .then(() => {
+      audioPlayer.seekTo(0);
+      progressInMs.value = 0;
+      console.log("Audio track loaded");
+      if (playState.value === "playing") {
+        playAudio();
+      }
+    })
+    .catch((error) => {
+      console.error("Error loading audio", error);
+    });
+};
+
+const playAudio = () => {
+  // make sure audio is loaded
+  audioPlayer.play();
+};
+
+const pauseAudio = () => {
+  audioPlayer.pause();
+};
+
+/**
+ * APIs
+ */
+
+const fetchPlaylist = () => {
+  playState.value = "loading";
+  fetch("https://api.poolsidefm.workers.dev/v1/get_tracks_by_playlist")
+    .then((response) => response.json())
+    .then((data: PlaylistResponse) => {
+      playListData.value = data;
+      setPlaylist(playListData.value.payload[0]);
+      playState.value = "paused";
+    })
+    .catch((error) => {
+      console.error("Error fetching playlist", error);
+      playState.value = "paused";
+    });
+};
+
+const fetchTrackMeta = (track: Track) => {
+  return Promise.all([fetchTrackWaveform(track), fetchTrackAudio(track)]);
+};
+
+const fetchTrackWaveform = (track: Track) => {
+  if (track.waveform_data) {
+    return;
+  }
+
+  const jsonUrl = track.waveform_url.replace(".png", ".json");
+  return fetch(jsonUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      track.waveform_data = data;
+    })
+    .catch((error) => {
+      console.error("Error fetching waveform", error);
+    });
+};
+
+const fetchTrackAudio = (track: Track) => {
+  const trackId = track.soundcloud_id;
+  track.audio_url = `https://api.poolsidefm.workers.dev/v2/get_sc_mp3_stream?track_id=${trackId}`;
+
+  // Commented out due to HEAD request not allowed
+  // // fetch head request to get the audio url
+  // console.log("Check audio url", track.audio_url);
+  // return fetch(track.audio_url, { method: "HEAD" })
+  //   .then((response) => {
+  //     if (response.ok) {
+  //       track.audio_error = false;
+  //       console.log("Audio is ok");
+  //     } else {
+  //       track.audio_error = true;
+  //       console.error("Error fetching audio url", response);
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error fetching audio url", error);
+  //     track.audio_error = true;
+  //   });
+};
+
+/**
+ * Misc
+ */
 
 const dummyTap = () => {
   console.log("dummy tap");
+};
+
+const convertToHHmm = (ms: number) => {
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
 };
 </script>
 
 <template>
   <Frame>
-    <Page class="bg-orange-100">
+    <Page class="bg-orange-100" @loaded="onLoaded">
       <ActionBar class="bg-zinc-800">
         <GridLayout rows="37, 60" columns="40,*,40" width="100%">
           <Image
@@ -88,11 +339,15 @@ const dummyTap = () => {
             row="0"
             height="50"
             text="$fonticon('fa-angle-left')"
-            @tap="dummyTap"
+            @tap="onTapChannel"
           >
             <FormattedString>
-              <Span text="Channel: " />
-              <Span class="font-chikarego2 text-lg" text="Poolsuite FM" />
+              <Span fontSize="8" text="Channel: " />
+              <Span
+                fontSize="16"
+                class="font-chikarego2"
+                :text="activePlaylist?.name"
+              />
               <Span text=" " />
               <Span class="fas text-xs" :text="$fonticon('fa-sort')" />
             </FormattedString>
@@ -144,15 +399,15 @@ const dummyTap = () => {
             <Label
               color="#000"
               class="text-black font-pixelarial text-center"
-              text="0:00 / 3:47"
+              :text="progressText"
             />
             <Label
               class="text-black my-2 text-center font-chikarego2"
-              text="High Hopes [SOS Band Cover]"
+              :text="activeTrack?.title || 'No track selected'"
             />
             <Label
               class="text-black font-pixelarial text-center"
-              text="Basement Love"
+              :text="activeTrack?.artist || 'Unknown artist'"
             />
           </StackLayout>
 
@@ -171,15 +426,19 @@ const dummyTap = () => {
               col="0"
               row="0"
               :text="$fonticon('fa-step-backward')"
-              @tap="dummyTap"
+              @tap="onTapBackward"
             />
             <Button
               class="fas text-sm z-0 border bg-transparent border-transparent"
               color="#000"
               col="1"
               row="0"
-              :text="$fonticon('fa-play')"
-              @tap="dummyTap"
+              :text="
+                playState === 'paused'
+                  ? $fonticon('fa-play')
+                  : $fonticon('fa-pause')
+              "
+              @tap="onTapPlay"
             />
             <Button
               class="fas text-sm bg-transparent z-0 border-l-2 border-black"
@@ -187,7 +446,7 @@ const dummyTap = () => {
               col="2"
               row="0"
               :text="$fonticon('fa-step-forward')"
-              @tap="dummyTap"
+              @tap="onTapForward"
             />
           </GridLayout>
 
