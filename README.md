@@ -40,5 +40,7 @@ Make sure at least Anrdoid SDK Platform >33 is installed.
 ## Credits
 
 - Original design idea from [PoolSuite FM](https://poolsuite.net/)
+- [ChiKareGo2 by Giles Booth](http://www.pentacom.jp/pentacom/bitfontmaker2/gallery/?id=3780)
+- [Pixel Arial 11 by Max](https://www.dafont.com/pixel-arial-11.font)
 - Image assets created by my humble image editing skills
 - Logo by Microsoft Copilot, prompt: "draw a palm tree black and white icon, transparent background"
