@@ -1,4 +1,5 @@
-import { Utils, View } from "@nativescript/core";
+// @ts-nocheck
+import { Utils } from "@nativescript/core";
 
 interface AudioPlayerOptions {
   autoplay?: boolean;

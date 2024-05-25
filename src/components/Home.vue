@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Dialogs, FormattedString } from "@nativescript/core";
-import { AudioPlayer } from "@/utils/AudioPlayer";
+import { AudioPlayer } from "~/utils/AudioPlayer";
 import {
   defineComponent,
   onMounted,
