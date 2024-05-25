@@ -1,6 +1,6 @@
 // You can add your native dependencies here
 dependencies {
-//  implementation 'androidx.multidex:multidex:2.0.1'
+  implementation 'com.google.android.exoplayer:exoplayer:2.19.1'
 }
 
 android {

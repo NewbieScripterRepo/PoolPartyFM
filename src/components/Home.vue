@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Dialogs, FormattedString } from "@nativescript/core";
-import { AudioPlayerOptions, TNSPlayer } from "nativescript-audio";
+import { AudioPlayer } from "@/utils/AudioPlayer";
 import {
   defineComponent,
   onMounted,
@@ -14,7 +14,7 @@ import ProgressBar from "./ProgressBar.vue"; // Adjust the path as necessary
  * Global state
  */
 const playListData = ref<null | PlaylistResponse>(null);
-const audioPlayer: TNSPlayer = new TNSPlayer();
+let audioPlayer: AudioPlayer | null = null;
 const progressTimer = ref<any>(null);
 
 /**
@@ -22,6 +22,9 @@ const progressTimer = ref<any>(null);
  */
 
 const onLoaded = () => {
+  if (!audioPlayer) {
+    audioPlayer = new AudioPlayer();
+  }
   if (!playListData.value) {
     fetchPlaylist();
   }
@@ -32,18 +35,22 @@ onMounted(() => {
   progressTimer.value = setInterval(() => {
     if (playState.value === "playing" && activeTrack.value) {
       const duration = activeTrack.value.duration_ms;
-      const currentMs = audioPlayer.currentTime;
+      const currentMs = audioPlayer.getCurrentTime();
       progressInMs.value = currentMs;
       progress.value = (currentMs / duration) * 100;
     } else {
-      progress.value = 0;
-      progressInMs.value = 0;
+      // progress.value = 0;
+      // progressInMs.value = 0;
     }
-    progressText.value = `${convertToHHmm(
-      progressInMs.value
-    )} / ${convertToHHmm(activeTrack.value?.duration_ms || 0)}`;
+    updateProgressText();
   }, 1000);
 });
+
+const updateProgressText = () => {
+  progressText.value = `${convertToHHmm(progressInMs.value)} / ${convertToHHmm(
+    activeTrack.value?.duration_ms || 0
+  )}`;
+};
 
 onUnmounted(() => {
   if (progressTimer.value) {
@@ -144,6 +151,10 @@ const setPlaylist = (playlist: Playlist) => {
 
 const setActiveTrack = (track: Track | null) => {
   activeTrack.value = track;
+  // reset progress
+  progress.value = 0;
+  progressInMs.value = 0;
+  updateProgressText();
   console.log("Switch track: ", track?.title);
   if (track) {
     fetchTrackMeta(track).then(() => {
@@ -160,7 +171,6 @@ const loadAudio = (track: Track) => {
       playState.value = "paused";
     }
   };
-  audioPlayer.pause();
   if (!track.audio_url || track.audio_error) {
     console.log("Continue to next song due to audio error");
     // continue
@@ -168,37 +178,21 @@ const loadAudio = (track: Track) => {
     return;
   }
 
-  const playerOptions: AudioPlayerOptions = {
-    audioFile: track.audio_url,
-    loop: false,
-    completeCallback: goNextSong,
-    errorCallback: function (errorObject: any) {
-      console.error("Error playing audio", errorObject);
+  audioPlayer.openUrl(track.audio_url, {
+    autoplay: playState.value === "playing",
+    onFinished: () => {
+      console.log("Audio finished");
       goNextSong();
     },
-    infoCallback: function (info: any) {
-      console.log("infoCallback", info);
+    onError: (error) => {
+      console.error("Audio error", error);
+      track.audio_error = true;
+      goNextSong();
     },
-  };
-
-  console.log("Init audio player from url", track.audio_url);
-  audioPlayer
-    .initFromFile(playerOptions)
-    .then(() => {
-      audioPlayer.seekTo(0);
-      progressInMs.value = 0;
-      console.log("Audio track loaded");
-      if (playState.value === "playing") {
-        playAudio();
-      }
-    })
-    .catch((error) => {
-      console.error("Error loading audio", error);
-    });
+  });
 };
 
 const playAudio = () => {
-  // make sure audio is loaded
   audioPlayer.play();
 };
 
@@ -248,24 +242,6 @@ const fetchTrackWaveform = (track: Track) => {
 const fetchTrackAudio = (track: Track) => {
   const trackId = track.soundcloud_id;
   track.audio_url = `https://api.poolsidefm.workers.dev/v2/get_sc_mp3_stream?track_id=${trackId}`;
-
-  // Commented out due to HEAD request not allowed
-  // // fetch head request to get the audio url
-  // console.log("Check audio url", track.audio_url);
-  // return fetch(track.audio_url, { method: "HEAD" })
-  //   .then((response) => {
-  //     if (response.ok) {
-  //       track.audio_error = false;
-  //       console.log("Audio is ok");
-  //     } else {
-  //       track.audio_error = true;
-  //       console.error("Error fetching audio url", response);
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error fetching audio url", error);
-  //     track.audio_error = true;
-  //   });
 };
 
 /**
@@ -499,3 +475,4 @@ const convertToHHmm = (ms: number) => {
   background-size: cover;
 }
 </style>
+~/utils/AudioPlayer
