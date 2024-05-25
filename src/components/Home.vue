@@ -38,9 +38,6 @@ onMounted(() => {
       const currentMs = audioPlayer.getCurrentTime();
       progressInMs.value = currentMs;
       progress.value = (currentMs / duration) * 100;
-    } else {
-      // progress.value = 0;
-      // progressInMs.value = 0;
     }
     updateProgressText();
   }, 1000);
@@ -340,7 +337,13 @@ const convertToHHmm = (ms: number) => {
             @tap="dummyTap"
           />
 
-          <ProgressBar :progress="progress" row="1" colSpan="3" class="mt-3" />
+          <ProgressBar
+            :progress="progress"
+            row="1"
+            colSpan="3"
+            class="mt-3"
+            :waveform="activeTrack?.waveform_data || []"
+          />
         </GridLayout>
 
         <!-- Play control -->
