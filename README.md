@@ -18,11 +18,12 @@ Big fan of PoolSuite FM! Since there's no Android version, I'm creating my own w
 
 Each branch is a part of tutorial as I progress.
 
-| Branch             | Description                                                                                                                        |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| main               | Latest source code                                                                                                                 |
-| part-1-ui          | [Project setup & base layout](https://newbiescripter.com/poolsuite-fm-player-in-nativescript-part-1-project-setup-ui/)             |
-| part-2-retro-style | [Refining UI & add Waveform progress bar](https://newbiescripter.com/android-poolsuite-fm-in-nativescript-part-2-refining-the-ui/) |
+| Branch                    | Description                                                                                                                        |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| main                      | Latest source code                                                                                                                 |
+| part-1-ui                 | [Project setup & base layout](https://newbiescripter.com/poolsuite-fm-player-in-nativescript-part-1-project-setup-ui/)             |
+| part-2-retro-style        | [Refining UI & add Waveform progress bar](https://newbiescripter.com/android-poolsuite-fm-in-nativescript-part-2-refining-the-ui/) |
+| part-3-api-with-exoplayer | [Playing the music 🎵](https://newbiescripter.com/android-poolsuite-fm-in-nativescript-part-3-playing-the-music/)                  |
 
 ## How to run the project
 
