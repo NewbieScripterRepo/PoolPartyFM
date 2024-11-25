@@ -4,6 +4,10 @@
 <img src="design/logo_exported.png" alt="PoolParty FM"/>
 </p>
 
+## TL;DR;
+
+For regular users looking to use PoolSuite FM on Android, go to the Releases section on the right, download the latest .apk file, install it on your Android device, and enjoy! For developer enthusiasts, continue reading below.
+
 ## ❤️ Motivation
 
 Big fan of PoolSuite FM! Since there's no Android version, I'm creating my own with NativeScript & Vue. This project is a result of original tutorial series on NewbieScripter.com. Follow along to see my progress. Star the repository to don't miss any update,
